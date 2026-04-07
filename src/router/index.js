@@ -18,7 +18,7 @@ const router = createRouter({
         //     component: () => import('../views/AboutView.vue'),
         // },
         {
-            path: '/',
+            path: '/', //currently the initial screen, but we'll change this
             name: 'login',
             component: () => import('../views/LoginView.vue'),
         },

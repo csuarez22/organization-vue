@@ -53,51 +53,7 @@
 
             <div class="field">
                 <label for="street">Street</label>
-                <input
-                    id="street"
-                    v-model="form.address.street"
-                    type="text"
-                    placeholder="123 Main St"
-                />
-            </div>
-
-            <div class="field-row">
-                <div class="field">
-                    <label for="city">City</label>
-                    <input
-                        id="city"
-                        v-model="form.address.city"
-                        type="text"
-                        placeholder="New York"
-                    />
-                </div>
-
-                <div class="field">
-                    <label for="state">State</label>
-                    <input id="state" v-model="form.address.state" type="text" placeholder="NY" />
-                </div>
-            </div>
-
-            <div class="field-row">
-                <div class="field">
-                    <label for="postcode">Postcode</label>
-                    <input
-                        id="postcode"
-                        v-model="form.address.postcode"
-                        type="text"
-                        placeholder="10001"
-                    />
-                </div>
-
-                <div class="field">
-                    <label for="country">Country</label>
-                    <input
-                        id="country"
-                        v-model="form.address.country"
-                        type="text"
-                        placeholder="United States"
-                    />
-                </div>
+                <input id="street" v-model="form.address" type="text" placeholder="123 Main St" />
             </div>
 
             <button class="btn-register" :disabled="isLoading" @click="handleRegister">
@@ -127,13 +83,7 @@ export default {
                 firstName: '',
                 lastName: '',
                 dateOfBirth: '',
-                address: {
-                    street: '',
-                    city: '',
-                    state: '',
-                    postcode: '',
-                    country: '',
-                },
+                address: '',
             },
             isLoading: false,
             errorMessage: '',
@@ -145,13 +95,21 @@ export default {
             const { username, email, password, firstName, lastName, dateOfBirth, address } =
                 this.form
 
-            if (!username || !email || !password || !firstName || !lastName || !dateOfBirth) {
+            if (
+                !username ||
+                !email ||
+                !password ||
+                !firstName ||
+                !lastName ||
+                !dateOfBirth ||
+                !address
+            ) {
                 return 'Please fill in all required fields.'
             }
 
-            if (!address.street || !address.city || !address.postcode || !address.country) {
-                return 'Please fill in your full address.'
-            }
+            // if (!address.street || !address.city || !address.postcode || !address.country) {
+            //     return 'Please fill in your full address.'
+            // }
 
             if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
                 return 'Please enter a valid email address.'
@@ -165,15 +123,17 @@ export default {
         },
 
         async handleRegister() {
-            this.errorMessage = this.validate() ?? ''
+            // this.errorMessage = this.validate() ?? ''
 
-            if (this.errorMessage) return
+            // if (this.errorMessage) return
 
             this.isLoading = true
 
             try {
+                console.log('form:', this.form)
+
                 await userController.createUser(this.form)
-                this.$router.push('/dashboard')
+                // this.$router.push('/dashboard')
             } catch (error) {
                 this.errorMessage =
                     error.response?.data?.message ?? 'Something went wrong. Please try again.'
@@ -181,6 +141,10 @@ export default {
                 this.isLoading = false
             }
         },
+    },
+
+    mounted() {
+        console.log(import.meta.env.VITE_API_BASE_URL)
     },
 }
 </script>
